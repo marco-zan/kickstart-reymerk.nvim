@@ -1,41 +1,3 @@
---[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-
-Kickstart.nvim is *not* a distribution.
-
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, and understand
-  what your configuration is doing.
-
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
-
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
-  - https://learnxinyminutes.com/docs/lua/
-
-  And then you can explore or search through `:help lua-guide`
-
-
-Kickstart Guide:
-
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
-
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now :)
---]]
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -57,6 +19,10 @@ if not vim.loop.fs_stat(lazypath) then
   }
 end
 vim.opt.rtp:prepend(lazypath)
+
+local function getWords()
+  return tostring(vim.fn.wordcount().words)
+end
 
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
@@ -112,12 +78,14 @@ require('lazy').setup({
     },
   },
 
-  { -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
+  {
+    "loctvl842/monokai-pro.nvim",
     config = function()
-      vim.cmd.colorscheme 'onedark'
-    end,
+      require("monokai-pro").setup({
+        filter="pro",
+        transparent_background=false,
+      })
+    end
   },
 
   { -- Set lualine as statusline
@@ -126,10 +94,13 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'monokai-pro',
         component_separators = '|',
-        section_separators = '',
+        section_separators = ''
       },
+      sections = {
+        lualine_y = { 'progress', { getWords }}
+      }
     },
   },
 
@@ -156,7 +127,7 @@ require('lazy').setup({
     'nvim-telescope/telescope-fzf-native.nvim',
     -- NOTE: If you are having trouble with this installation,
     --       refer to the README for telescope-fzf-native for more instructions.
-    build = 'make',
+    build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
     cond = function()
       return vim.fn.executable 'make' == 1
     end,
@@ -178,15 +149,6 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
-  -- NOTE: The import below automatically adds your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
-  --    up-to-date with whatever is in the kickstart repo.
-  --
-  --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  --
-  --    An additional note is that if you only copied in the `init.lua`, you can just comment this line
-  --    to get rid of the warning telling you that there are not plugins in `lua/custom/plugins/`.
-  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
@@ -495,3 +457,19 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+
+
+-- Movimenti modificati 
+vim.api.nvim_set_keymap('n', 'j', 'h', {noremap = true})
+vim.api.nvim_set_keymap('n', 'l', 'j', {noremap = true})
+vim.api.nvim_set_keymap('n', ';', 'l', {noremap = true})
+
+vim.api.nvim_set_keymap('v', 'j', 'h', {noremap = true})
+vim.api.nvim_set_keymap('v', 'l', 'j', {noremap = true})
+vim.api.nvim_set_keymap('v', ';', 'l', {noremap = true})
+
+
+-- Scelta del colorscheme
+vim.cmd([[colorscheme monokai-pro]])
+
