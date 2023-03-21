@@ -1,3 +1,22 @@
+
+if vim.g.vscode then
+  -- Movimenti modificati 
+  vim.api.nvim_set_keymap('n', 'j', 'h', {noremap = true})
+  vim.api.nvim_set_keymap('n', 'l', 'j', {noremap = true})
+  vim.api.nvim_set_keymap('n', ';', 'l', {noremap = true})
+
+  vim.api.nvim_set_keymap('v', 'j', 'h', {noremap = true})
+  vim.api.nvim_set_keymap('v', 'l', 'j', {noremap = true})
+  vim.api.nvim_set_keymap('v', ';', 'l', {noremap = true})
+
+  -- Scelta del colorscheme
+  vim.cmd([[colorscheme default]])
+
+  do
+    return
+  end
+end
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -127,7 +146,7 @@ require('lazy').setup({
     'nvim-telescope/telescope-fzf-native.nvim',
     -- NOTE: If you are having trouble with this installation,
     --       refer to the README for telescope-fzf-native for more instructions.
-    build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
+    build = 'make',
     cond = function()
       return vim.fn.executable 'make' == 1
     end,
