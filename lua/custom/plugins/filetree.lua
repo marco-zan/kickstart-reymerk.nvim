@@ -41,6 +41,15 @@ return {
                 conflict  = "",
               }
             }
+          },
+          filesystem = {
+            window = {
+              mappings = {
+                ["l"] = "move_cursor_down",
+                [";"] = "open",
+                ["j"] = "toggle_preview"
+              }
+            }
           }
         })
 
