@@ -1,13 +1,20 @@
+-- Functional wrapper for mapping custom keybindings
+function map(lhs, rhs, opts)
+    local options = { noremap = true }
+    if opts then
+        options = vim.tbl_extend("force", options, opts)
+    end
+    vim.api.nvim_set_keymap('n', lhs, rhs, options)
+    vim.api.nvim_set_keymap('v', lhs, rhs, options)
+    vim.api.nvim_set_keymap('o', lhs, rhs, options)
+    vim.api.nvim_set_keymap('c', lhs, rhs, options)
+end
 
 if vim.g.vscode then
   -- Movimenti modificati 
-  vim.api.nvim_set_keymap('n', 'j', 'h', {noremap = true})
-  vim.api.nvim_set_keymap('n', 'l', 'j', {noremap = true})
-  vim.api.nvim_set_keymap('n', ';', 'l', {noremap = true})
-
-  vim.api.nvim_set_keymap('v', 'j', 'h', {noremap = true})
-  vim.api.nvim_set_keymap('v', 'l', 'j', {noremap = true})
-  vim.api.nvim_set_keymap('v', ';', 'l', {noremap = true})
+  map('j', 'h', {noremap = true})
+  map('l', 'j', {noremap = true})
+  map(';', 'l', {noremap = true})
 
   -- Scelta del colorscheme
   vim.cmd([[colorscheme default]])
@@ -168,6 +175,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
+  { import = 'custom.plugins' }
 }, {})
 
 -- [[ Setting options ]]
@@ -480,13 +488,9 @@ cmp.setup {
 
 
 -- Movimenti modificati 
-vim.api.nvim_set_keymap('n', 'j', 'h', {noremap = true})
-vim.api.nvim_set_keymap('n', 'l', 'j', {noremap = true})
-vim.api.nvim_set_keymap('n', ';', 'l', {noremap = true})
-
-vim.api.nvim_set_keymap('v', 'j', 'h', {noremap = true})
-vim.api.nvim_set_keymap('v', 'l', 'j', {noremap = true})
-vim.api.nvim_set_keymap('v', ';', 'l', {noremap = true})
+map('j', 'h', {noremap = true})
+map('l', 'j', {noremap = true})
+map(';', 'l', {noremap = true})
 
 
 -- Scelta del colorscheme
