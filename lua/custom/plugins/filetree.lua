@@ -4,9 +4,9 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 return {
     "nvim-neo-tree/neo-tree.nvim",
       branch = "v2.x",
-      -- keys = {
-      --   { "<leader>ft", "<cmd>Neotree toggle<cr>", desc = "NeoTree" },
-      -- },
+      keys = {
+        { "<leader>ft", "<cmd>Neotree toggle<cr>", desc = "NeoTree" },
+      },
       dependencies = {
         "nvim-lua/plenary.nvim",
         "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
@@ -39,15 +39,6 @@ return {
                 unstaged  = "",
                 staged    = "",
                 conflict  = "",
-              }
-            }
-          },
-          filesystem = {
-            window = {
-              mappings = {
-                ["l"] = "move_cursor_down",
-                [";"] = "open",
-                ["j"] = "toggle_preview"
               }
             }
           }

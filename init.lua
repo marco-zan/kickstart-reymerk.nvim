@@ -1,21 +1,5 @@
--- Functional wrapper for mapping custom keybindings
-function map(lhs, rhs, opts)
-    local options = { noremap = true }
-    if opts then
-        options = vim.tbl_extend("force", options, opts)
-    end
-    vim.api.nvim_set_keymap('n', lhs, rhs, options)
-    vim.api.nvim_set_keymap('v', lhs, rhs, options)
-    vim.api.nvim_set_keymap('o', lhs, rhs, options)
-    vim.api.nvim_set_keymap('c', lhs, rhs, options)
-end
 
 if vim.g.vscode then
-  -- Movimenti modificati 
-  map('j', 'h', {noremap = true})
-  map('l', 'j', {noremap = true})
-  map(';', 'l', {noremap = true})
-
   -- Scelta del colorscheme
   vim.cmd([[colorscheme default]])
 
@@ -277,7 +261,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'help', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -484,14 +468,6 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
-
-
-
--- Movimenti modificati 
-map('j', 'h', {noremap = true})
-map('l', 'j', {noremap = true})
-map(';', 'l', {noremap = true})
-
 
 -- Scelta del colorscheme
 vim.cmd([[colorscheme monokai-pro]])
