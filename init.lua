@@ -62,7 +62,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim', opts = {}, tag = "legacy" },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -91,13 +91,12 @@ require('lazy').setup({
   },
 
   {
-    "loctvl842/monokai-pro.nvim",
-    config = function()
-      require("monokai-pro").setup({
-        filter="pro",
-        transparent_background=false,
-      })
-    end
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      transparent = true
+    },
   },
 
   { -- Set lualine as statusline
@@ -106,7 +105,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'monokai-pro',
+        theme = 'tokyonight',
         component_separators = '|',
         section_separators = ''
       },
@@ -212,6 +211,9 @@ vim.o.termguicolors = true
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
+-- To open termial
+vim.keymap.set('n', '<leader>ot', function() vim.api.nvim_command('terminal') end, { desc = '[O]pen [T]erminal' })
+
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
@@ -240,25 +242,50 @@ require('telescope').setup {
   },
 }
 
+-- The real magic: automatically identify the project root based on git files or 
+-- lsp active in the current buffer
+local project_root = function()
+  local cwd = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+  if vim.v.shell_error ~= 0 then
+    -- if not git then active lsp client root
+    -- will get the configured root directory of the first attached lsp. You will have problems if you are using multiple lsps 
+    cwd = vim.lsp.get_active_clients()[1].config.root_dir
+  end
+  return cwd
+end
+
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
-vim.keymap.set('n', '<leader>/', function()
+
+vim.keymap.set('n', '<leader><space>',
+  function ()
+    local opts = {}
+    opts.cwd = project_root()
+    require('telescope.builtin').find_files(opts)
+  end, { desc = 'Project find files' })
+
+vim.keymap.set('n', '<leader>/',
+  function ()
+    local opts = {}
+    opts.cwd = project_root()
+    require('telescope.builtin').live_grep( opts )
+  end, { desc = '[/] Grep search in current project' })
+
+vim.keymap.set('n', '<leader>bs', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 10,
     previewer = false,
   })
-end, { desc = '[/] Fuzzily search in current buffer' })
+end, { desc = '[B]uffer [S]earch' })
 
-vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
-vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
-vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
-vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>bd', require('telescope.builtin').diagnostics, { desc = '[B]uffer [D]iagnostics' })
+vim.keymap.set('n', '<leader>hh', require('telescope.builtin').help_tags, { desc = '[H]elp' })
+vim.keymap.set('n', '<leader>bb', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
+-- vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -349,22 +376,23 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
+  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+
   nmap('<leader>cr', vim.lsp.buf.rename, '[C]ode [R]ename')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-  nmap('<leader>cd', vim.lsp.buf.definition, '[C]ode [D]efinition')
   nmap('<leader>cR', require('telescope.builtin').lsp_references, '[C]ode [R]eferences')
   nmap('<leader>cI', vim.lsp.buf.implementation, '[C]ode [I]mplementation')
-  nmap('<leader>cD', vim.lsp.buf.type_definition, '[C]ode Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  -- nmap('<leader>cD', vim.lsp.buf.type_definition, '[C]ode Type [D]efinition')
+  -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+  -- nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
   nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
-  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+  nmap('<leader>gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
   nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
   nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
   nmap('<leader>wl', function()
@@ -385,9 +413,9 @@ end
 local servers = {
   clangd = {},
   -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  -- tsserver = {},
+  pyright = {},
+  rust_analyzer = {},
+  tsserver = {},
 
   lua_ls = {
     Lua = {
@@ -473,5 +501,21 @@ cmp.setup {
 -- vim: ts=2 sts=2 sw=2 et
 
 -- Scelta del colorscheme
-vim.cmd([[colorscheme monokai-pro]])
+-- vim.cmd([[colorscheme monokai-pro]])auto
+vim.cmd[[colorscheme tokyonight]]
 
+
+-- buffer navigation
+
+vim.keymap.set('n', '<leader>b]', function() vim.cmd('bn') end, { desc = '[bn] Next buffer' })
+vim.keymap.set('n', '<leader>b[', function() vim.cmd('bp') end, { desc = '[bp] Previous buffer' })
+vim.keymap.set('n', '<leader>bd', function() vim.cmd('bd') end, { desc = '[bd] Buffer delete' })
+
+-- Harpoon keymaps
+vim.keymap.set('n', '<leader>bh', require("harpoon.ui").toggle_quick_menu, { desc = "[B]uffers list [H]arpoon" })
+vim.keymap.set('n', '<leader>hl', require("harpoon.ui").toggle_quick_menu, { desc = "[H]arpoon [L]ist" })
+
+vim.keymap.set('n', '<leader>hm', require("harpoon.mark").add_file, { desc = "[H]arpoon [M]ark" })
+
+vim.keymap.set('n', '<leader>h]', require("harpoon.ui").nav_next, { desc = '[->] Next buffer' })
+vim.keymap.set('n', '<leader>h[', require("harpoon.ui").nav_prev, { desc = '[<-] Previous buffer' })

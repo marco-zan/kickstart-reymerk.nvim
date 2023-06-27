@@ -5,7 +5,7 @@ return {
     "nvim-neo-tree/neo-tree.nvim",
       branch = "v2.x",
       keys = {
-        { "<leader>ft", "<cmd>Neotree toggle<cr>", desc = "NeoTree" },
+        { "<leader>op", "<cmd>Neotree toggle<cr>", desc = "NeoTree" },
       },
       dependencies = {
         "nvim-lua/plenary.nvim",
@@ -17,11 +17,11 @@ return {
           close_if_last_window = true,
           enable_git_status = true,
           follow_current_file = true,
-          hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
+          hijack_netrw_behavior = -- "open_default", -- netrw disabled, opening a directory opens neo-tree
                                                   -- in whatever position is specified in window.position
                                 -- "open_current",  -- netrw disabled, opening a directory opens within the
                                                   -- window like netrw would, regardless of window.position
-                                -- "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
+                                "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
           use_libuv_file_watcher = false, -- This will use the OS level file watchers to detect changes
                                           -- instead of relying on nvim autocmd events
           open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, 
