@@ -8,7 +8,7 @@ if vim.g.vscode then
   end
 end
 
-vim.opt.guifont = { "Consolas Ligaturized v3", "h12" }
+vim.opt.guifont = { "Consolas Ligaturized v3", "h13" }
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -212,7 +212,8 @@ vim.o.termguicolors = true
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- To open termial
-vim.keymap.set('n', '<leader>ot', function() vim.api.nvim_command('terminal') end, { desc = '[O]pen [T]erminal' })
+vim.keymap.set('n', '<leader>ot', function() vim.api.nvim_command('FloatermToggle') end, { desc = '[O]pen floating [t]erminal' })
+vim.keymap.set('n', '<leader>oT', function() vim.api.nvim_command('terminal') end, { desc = '[O]pen Full-page [T]erminal' })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -291,7 +292,7 @@ vim.keymap.set('n', '<leader>bb', require('telescope.builtin').buffers, { desc =
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'lua', 'python', 'tsx', 'typescript', 'vimdoc', 'vim', 'zig' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -389,7 +390,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  -- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('<leader>gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -472,7 +473,7 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
+    ['<C-j>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       elseif luasnip.expand_or_jumpable() then
@@ -481,7 +482,7 @@ cmp.setup {
         fallback()
       end
     end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
+    ['<C-k>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       elseif luasnip.jumpable(-1) then
@@ -505,10 +506,19 @@ cmp.setup {
 vim.cmd[[colorscheme tokyonight]]
 
 
+-- Easy save file
+vim.keymap.set('n', '<leader>s', function() vim.cmd('w') end, { desc = '[s] Save buffer' })
+
 -- buffer navigation
 
 vim.keymap.set('n', '<leader>b]', function() vim.cmd('bn') end, { desc = '[bn] Next buffer' })
+vim.keymap.set('n', '<leader>]', function() vim.cmd('bn') end, { desc = '[bn] Next buffer' })
+vim.keymap.set('n', '<leader>bn', function() vim.cmd('bn') end, { desc = '[bn] Next buffer' })
+
 vim.keymap.set('n', '<leader>b[', function() vim.cmd('bp') end, { desc = '[bp] Previous buffer' })
+vim.keymap.set('n', '<leader>[', function() vim.cmd('bp') end, { desc = '[bp] Previous buffer' })
+vim.keymap.set('n', '<leader>bp', function() vim.cmd('bp') end, { desc = '[bp] Previous buffer' })
+
 vim.keymap.set('n', '<leader>bd', function() vim.cmd('bd') end, { desc = '[bd] Buffer delete' })
 
 -- Harpoon keymaps
