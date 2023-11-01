@@ -10,11 +10,7 @@ end
 
 vim.opt.guifont = { "Consolas Ligaturized v3", "h13" }
 
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+require("reymerk.set")
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -163,61 +159,6 @@ require('lazy').setup({
   { import = 'custom.plugins' }
 }, {})
 
--- [[ Setting options ]]
--- See `:help vim.o`
-
--- Set highlight on search
-vim.o.hlsearch = false
-
--- Make line numbers default
-vim.wo.number = true
-vim.wo.relativenumber = true
-
--- Enable mouse mode
-vim.o.mouse = 'a'
-
--- Sync clipboard between OS and Neovim.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.o.clipboard = 'unnamedplus'
-
--- Enable break indent
-vim.o.breakindent = true
-
--- Save undo history
-vim.o.undofile = true
-
--- Case insensitive searching UNLESS /C or capital in search
-vim.o.ignorecase = true
-vim.o.smartcase = true
-
--- Keep signcolumn on by default
-vim.wo.signcolumn = 'yes'
-
--- Decrease update time
-vim.o.updatetime = 250
-vim.o.timeout = true
-vim.o.timeoutlen = 300
-
--- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
-
--- NOTE: You should make sure your terminal supports this
-vim.o.termguicolors = true
-
--- [[ Basic Keymaps ]]
-
--- Keymaps for better default experience
--- See `:help vim.keymap.set()`
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-
--- To open termial
-vim.keymap.set('n', '<leader>ot', function() vim.api.nvim_command('FloatermToggle') end, { desc = '[O]pen floating [t]erminal' })
-vim.keymap.set('n', '<leader>oT', function() vim.api.nvim_command('terminal') end, { desc = '[O]pen Full-page [T]erminal' })
-
--- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -505,27 +446,4 @@ cmp.setup {
 -- vim.cmd([[colorscheme monokai-pro]])auto
 vim.cmd[[colorscheme tokyonight]]
 
-
--- Easy save file
-vim.keymap.set('n', '<leader>s', function() vim.cmd('w') end, { desc = '[s] Save buffer' })
-
--- buffer navigation
-
-vim.keymap.set('n', '<leader>b]', function() vim.cmd('bn') end, { desc = '[bn] Next buffer' })
-vim.keymap.set('n', '<leader>]', function() vim.cmd('bn') end, { desc = '[bn] Next buffer' })
-vim.keymap.set('n', '<leader>bn', function() vim.cmd('bn') end, { desc = '[bn] Next buffer' })
-
-vim.keymap.set('n', '<leader>b[', function() vim.cmd('bp') end, { desc = '[bp] Previous buffer' })
-vim.keymap.set('n', '<leader>[', function() vim.cmd('bp') end, { desc = '[bp] Previous buffer' })
-vim.keymap.set('n', '<leader>bp', function() vim.cmd('bp') end, { desc = '[bp] Previous buffer' })
-
-vim.keymap.set('n', '<leader>bd', function() vim.cmd('bd') end, { desc = '[bd] Buffer delete' })
-
--- Harpoon keymaps
-vim.keymap.set('n', '<leader>bh', require("harpoon.ui").toggle_quick_menu, { desc = "[B]uffers list [H]arpoon" })
-vim.keymap.set('n', '<leader>hl', require("harpoon.ui").toggle_quick_menu, { desc = "[H]arpoon [L]ist" })
-
-vim.keymap.set('n', '<leader>hm', require("harpoon.mark").add_file, { desc = "[H]arpoon [M]ark" })
-
-vim.keymap.set('n', '<leader>h]', require("harpoon.ui").nav_next, { desc = '[->] Next buffer' })
-vim.keymap.set('n', '<leader>h[', require("harpoon.ui").nav_prev, { desc = '[<-] Previous buffer' })
+require("reymerk.remap")
