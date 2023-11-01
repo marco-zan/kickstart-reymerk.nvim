@@ -1,6 +1,6 @@
 
 -- Easy save file
-vim.keymap.set('n', '<leader>s', function() vim.cmd('w') end, { desc = '[s] Save buffer' })
+vim.keymap.set('n', '<leader>s', function() vim.cmd('up') end, { desc = '[S] Save buffer' })
 
 -- buffer navigation
 
@@ -15,13 +15,13 @@ vim.keymap.set('n', '<leader>bp', function() vim.cmd('bp') end, { desc = '[bp] P
 vim.keymap.set('n', '<leader>bd', function() vim.cmd('bd') end, { desc = '[bd] Buffer delete' })
 
 -- Harpoon keymaps
-vim.keymap.set('n', '<leader>bh', require("harpoon.ui").toggle_quick_menu, { desc = "[B]uffers list [H]arpoon" })
-vim.keymap.set('n', '<leader>hl', require("harpoon.ui").toggle_quick_menu, { desc = "[H]arpoon [L]ist" })
-
-vim.keymap.set('n', '<leader>hm', require("harpoon.mark").add_file, { desc = "[H]arpoon [M]ark" })
-
-vim.keymap.set('n', '<leader>h]', require("harpoon.ui").nav_next, { desc = '[->] Next buffer' })
-vim.keymap.set('n', '<leader>h[', require("harpoon.ui").nav_prev, { desc = '[<-] Previous buffer' })
+-- vim.keymap.set('n', '<leader>bh', require("harpoon.ui").toggle_quick_menu, { desc = "[B]uffers list [H]arpoon" })
+-- vim.keymap.set('n', '<leader>hl', require("harpoon.ui").toggle_quick_menu, { desc = "[H]arpoon [L]ist" })
+--
+-- vim.keymap.set('n', '<leader>hm', require("harpoon.mark").add_file, { desc = "[H]arpoon [M]ark" })
+--
+-- vim.keymap.set('n', '<leader>h]', require("harpoon.ui").nav_next, { desc = '[->] Next buffer' })
+-- vim.keymap.set('n', '<leader>h[', require("harpoon.ui").nav_prev, { desc = '[<-] Previous buffer' })
 
 -- To move the code with shift J and K
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")

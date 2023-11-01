@@ -3,12 +3,5 @@
 --
 -- See the kickstart.nvim README for more information
 return {
-  {
-    'ThePrimeagen/harpoon',
-
-    dependencies = {
-      'nvim-lua/plenary.nvim'
-     }
-  }
 }
 
