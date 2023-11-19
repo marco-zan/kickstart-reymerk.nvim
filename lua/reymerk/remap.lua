@@ -54,3 +54,21 @@ vim.keymap.set('t', "<Esc>", "<C-\\><C-n>:FloatermHide<CR>")
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+-- Open netrw in current file
+vim.keymap.set('n', '<leader>op', function ()
+    local relative_path = vim.fn.expand("%:h")
+    local startPos, endPos = string.find(relative_path, "/")
+    if startPos == 1 then
+       relative_path = "."
+    end
+    vim.cmd [[:let @/=expand("%:t")]]
+    vim.cmd("Explore " .. relative_path)
+    if startPos > 1 then
+        while startPos ~= nil do
+            startPos, endPos = string.find(relative_path, "/", endPos + 1)
+            vim.cmd("call netrw#Call('NetrwBrowseUpDir', 1)")
+        end
+        vim.cmd("call netrw#Call('NetrwBrowseUpDir', 1)")
+    end
+    vim.cmd(":normal n<CR>zz")
+end, { desc = "[O]pen [P]roject dir"})

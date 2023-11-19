@@ -56,6 +56,8 @@ vim.opt.isfname:append("@-@")
 -- To setu the height of the suggestions (to not shoot all over the place)
 vim.opt.pumheight = 8;
 
+-- To choose the best Netrw mode
+vim.g.netrw_liststyle=3
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
