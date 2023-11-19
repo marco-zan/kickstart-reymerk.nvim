@@ -93,8 +93,8 @@ require('lazy').setup({
     lazy = false,
     priority = 1000,
     opts = {
-      transparent = true
-    },
+      transparent = true,
+    }
   },
 
   { -- Set lualine as statusline
@@ -368,5 +368,6 @@ require('reymerk.lsp')
 -- Scelta del colorscheme
 -- vim.cmd([[colorscheme monokai-pro]])auto
 vim.cmd[[colorscheme tokyonight]]
+vim.api.nvim_set_hl(0, 'LineNr', { fg = "#9baeff"} )
 
 require("reymerk.remap")
