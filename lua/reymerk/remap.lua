@@ -48,6 +48,8 @@ vim.keymap.set("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 vim.keymap.set('n', '<leader>ot', function() vim.api.nvim_command('FloatermToggle') end, { desc = '[O]pen floating [t]erminal' })
 vim.keymap.set('n', '<leader>oT', function() vim.api.nvim_command('terminal') end, { desc = '[O]pen Full-page [T]erminal' })
 
+vim.keymap.set('t', "<Esc>", "<C-\\><C-n>:FloatermHide<CR>")
+
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
