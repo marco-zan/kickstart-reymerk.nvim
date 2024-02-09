@@ -14,6 +14,8 @@ vim.keymap.set('n', '<leader>bp', function() vim.cmd('bp') end, { desc = '[bp] P
 
 vim.keymap.set('n', '<leader>bd', function() vim.cmd('bd') end, { desc = '[bd] Buffer delete' })
 
+vim.keymap.set('n', '<leader>bt', function() vim.cmd('e ~/vim_temp.txt') end, { desc = '[bt] Temporary Buffer' })
+
 -- Harpoon keymaps
 -- vim.keymap.set('n', '<leader>bh', require("harpoon.ui").toggle_quick_menu, { desc = "[B]uffers list [H]arpoon" })
 -- vim.keymap.set('n', '<leader>hl', require("harpoon.ui").toggle_quick_menu, { desc = "[H]arpoon [L]ist" })
@@ -54,21 +56,13 @@ vim.keymap.set('t', "<Esc>", "<C-\\><C-n>:FloatermHide<CR>")
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
--- Open netrw in current file
-vim.keymap.set('n', '<leader>op', function ()
-    local relative_path = vim.fn.expand("%:h")
-    local startPos, endPos = string.find(relative_path, "/")
-    if startPos == 1 then
-       relative_path = "."
-    end
-    vim.cmd [[:let @/=expand("%:t")]]
-    vim.cmd("Explore " .. relative_path)
-    if startPos > 1 then
-        while startPos ~= nil do
-            startPos, endPos = string.find(relative_path, "/", endPos + 1)
-            vim.cmd("call netrw#Call('NetrwBrowseUpDir', 1)")
-        end
-        vim.cmd("call netrw#Call('NetrwBrowseUpDir', 1)")
-    end
-    vim.cmd(":normal n<CR>zz")
-end, { desc = "[O]pen [P]roject dir"})
+vim.api.nvim_set_keymap(
+    "n",
+    "<leader>op",
+    ":NvimTreeFindFile<CR>",
+    {
+        noremap = true,
+        desc = "[O]pen [P]roject dir"
+    }
+
+)

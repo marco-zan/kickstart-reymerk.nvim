@@ -28,10 +28,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local function getWords()
-  return tostring(vim.fn.wordcount().words)
-end
-
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
 --
@@ -67,9 +63,28 @@ require('lazy').setup({
     },
   },
 
-  { -- Autocompletion
+  {
+   -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    dependencies = {
+      -- Snippet Engine & its associated nvim-cmp source
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+
+      -- Adds LSP completion capabilities
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-path',
+
+      -- Adds a number of user-friendly snippets
+      'rafamadriz/friendly-snippets',
+    },
+  },
+  {
+    "L3MON4D3/LuaSnip",
+    -- follow latest release.
+    version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    -- install jsregexp (optional!).
+    -- build = "make install_jsregexp"
   },
 
   -- Useful plugin to show you pending keybinds.
@@ -157,9 +172,10 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
+    main = "ibl",
     opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
+      -- char = '┊',
+      -- show_trailing_blankline_indent = false,
     },
   },
 

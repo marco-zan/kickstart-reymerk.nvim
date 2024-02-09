@@ -29,7 +29,9 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  -- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('<leader>ch', vim.lsp.buf.signature_help, '[ch] Code Signature Help')
+
+  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help )
 
   -- Lesser used LSP functionality
   nmap('<leader>gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -52,7 +54,7 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   clangd = {},
-  -- gopls = {},
+  gopls = {},
   pyright = {},
   rust_analyzer = {},
   tsserver = {},
@@ -92,6 +94,7 @@ mason_lspconfig.setup_handlers {
       capabilities = capabilities,
       on_attach = on_attach,
       settings = servers[server_name],
+      filetypes = (servers[server_name] or {}).filetypes,
     }
   end,
 }
@@ -101,7 +104,7 @@ require('ufo').setup()
 -- nvim-cmp setup
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
-
+require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
 cmp.setup {
@@ -121,7 +124,7 @@ cmp.setup {
     ['<C-j>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
+      elseif luasnip.expand_or_locally_jumpable() then
         luasnip.expand_or_jump()
       else
         fallback()
@@ -130,7 +133,7 @@ cmp.setup {
     ['<C-k>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
+      elseif luasnip.locally_jumpable(-1) then
         luasnip.jump(-1)
       else
         fallback()
@@ -140,5 +143,6 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'path' },
   },
 }

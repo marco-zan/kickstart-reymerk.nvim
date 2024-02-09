@@ -64,3 +64,6 @@ vim.g.netrw_liststyle=3
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
+-- Automatically open vsplit on the right
+vim.opt.splitright = true;
+
