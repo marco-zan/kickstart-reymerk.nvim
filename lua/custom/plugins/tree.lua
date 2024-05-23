@@ -21,18 +21,19 @@ return {
       -- api.config.mappings.default_on_attach(bufnr)
 
       -- custom mappings
-      vim.keymap.set('n', 'c', api.fs.create,        opts('Create file or dir'))
-      vim.keymap.set('n', 'y', api.fs.copy.node,        opts('Yank file'))
-      vim.keymap.set('n', 'm', api.marks.toggle,        opts('Toggle mark'))
-      vim.keymap.set('n', 'bm', api.marks.bulk.move,        opts('Move selected'))
+      vim.keymap.set('n', 'c',    api.fs.create,               opts('Create file or dir'))
+      vim.keymap.set('n', 'y',    api.fs.copy.node,            opts('Yank file'))
+      vim.keymap.set('n', 'm',    api.marks.toggle,            opts('Toggle mark'))
+      vim.keymap.set('n', 'bm',   api.marks.bulk.move,         opts('Move selected'))
 
-      vim.keymap.set('n', 'p', api.fs.paste,        opts('Paste file'))
-      vim.keymap.set('n', '<CR>', api.node.open.edit,        opts('Open'))
+      vim.keymap.set('n', 'p',    api.fs.paste,                opts('Paste file'))
+      vim.keymap.set('n', '<CR>', api.node.open.edit,          opts('Open'))
 
-      vim.keymap.set('n', 'r', api.fs.rename,        opts('Rename'))
-      vim.keymap.set('n', 'x', api.fs.trash,        opts('Delete'))
+      vim.keymap.set('n', 'r',    api.fs.rename,               opts('Rename'))
+      vim.keymap.set('n', 'x',    api.fs.trash,                opts('Delete'))
 
-      vim.keymap.set('n', 'q', api.tree.close,        opts('Close nvimTree'))
+      vim.keymap.set('n', 'q',    api.tree.close,              opts('Close nvimTree'))
+      -- vim.keymap.see('n', 'py',   api.fs.copy.relative_path,   opts('Yank absolute path'))
       -- vim.keymap.set('n', '?',     api.tree.toggle_help,                  opts('Help'))
     end
 
