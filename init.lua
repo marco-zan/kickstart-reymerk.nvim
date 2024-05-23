@@ -28,6 +28,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local function getWords()
+  return tostring(vim.fn.wordcount().words)
+end
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
 --
@@ -88,6 +91,10 @@ require('lazy').setup({
     version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
     -- install jsregexp (optional!).
     -- build = "make install_jsregexp"
+    config = function()
+      require("luasnip.loaders.from_snipmate").load()
+      require('luasnip').setup()
+    end,
   },
 
   -- Useful plugin to show you pending keybinds.
@@ -115,6 +122,14 @@ require('lazy').setup({
     }
   },
 
+  { "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    opts = {
+      flavour = "latte",
+    }
+  },
+
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
@@ -135,7 +150,7 @@ require('lazy').setup({
         lualine_x = {'encoding', 'fileformat'},
         lualine_y = {
           "location",
-          -- { getWords }
+          { getWords }
         },
         lualine_z = { "mode" } 
       },
@@ -217,6 +232,39 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
+  -- To highlight the color in css files. It is sooooo handy
+  {
+    'norcalli/nvim-colorizer.lua',
+    config = function()
+      require('colorizer').setup {
+        css = { rgb_fn = true; hsl_fn = true; names = true; RGB = true; RRGGBB = true;};
+        scss ={ rgb_fn = true; hsl_fn = true; names = true; RGB = true; RRGGBB = true;};
+        sass = { rgb_fn = true; hsl_fn = true; names = true; RGB = true; RRGGBB = true;};
+        html = { rgb_fn = true; hsl_fn = true; names = true; RGB = true; RRGGBB = true;};
+        htmldjango = { rgb_fn = true; hsl_fn = true; names = true; RGB = true; RRGGBB = true;};
+        'javascript';
+        'javascriptreact';
+        'typescript';
+        'typescriptreact';
+        'vue';
+        'svelte';
+        'lua';
+      }
+    end,
+
+  },
+
+  {
+    url = 'https://tpope.io/vim/abolish.git',
+  },
+  {
+    "ahmedkhalf/project.nvim",
+    config = function()
+      require("project_nvim").setup {}
+    end,
+
+  },
+
   { import = 'custom.plugins' }
 }, {})
 
@@ -259,19 +307,8 @@ require('telescope').setup {
 
 -- The real magic: automatically identify the project root based on git files or 
 -- lsp active in the current buffer
-local project_root = function()
-  local cwd = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
-
-  -- if not git then active lsp client root
-  if vim.v.shell_error ~= 0 and vim.lsp.get_active_clients()[1] ~= nil then
-    -- will get the configured root directory of the first attached lsp. You will have problems if you are using multiple lsps 
-    cwd = vim.lsp.get_active_clients()[1].config.root_dir
-
-  -- if not lsp, then the cwd
-  else
-    cwd = vim.loop.cwd()
-  end
-  return cwd
+function PROJECT_ROOT()
+  return vim.loop.cwd()
 end
 
 -- Enable telescope fzf native, if installed
@@ -283,14 +320,14 @@ vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc =
 vim.keymap.set('n', '<leader><space>',
   function ()
     local opts = {}
-    opts.cwd = project_root()
+    opts.cwd = PROJECT_ROOT()
     require('telescope.builtin').find_files(opts)
   end, { desc = 'Project find files' })
 
 vim.keymap.set('n', '<leader>/',
   function ()
     local opts = {}
-    opts.cwd = project_root()
+    opts.cwd = PROJECT_ROOT()
     require('telescope.builtin').live_grep( opts )
   end, { desc = '[/] Grep search in current project' })
 
@@ -384,14 +421,15 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 
-
+require("luasnip.loaders.from_snipmate").lazy_load()
 require('reymerk.lsp')
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 
 -- Scelta del colorscheme
 -- vim.cmd([[colorscheme monokai-pro]])auto
+--
 vim.cmd[[colorscheme tokyonight]]
 vim.api.nvim_set_hl(0, 'LineNr', { fg = "#9baeff"} )
-
+-- vim.cmd.colorscheme "catppuccin"
 require("reymerk.remap")

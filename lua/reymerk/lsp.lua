@@ -45,6 +45,7 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+
 end
 
 -- Enable the following language servers
@@ -57,6 +58,23 @@ local servers = {
   pyright = {},
   tsserver = {},
 
+  html = {
+    filetypes = { 'html', 'htmldjango' },
+  },
+  htmx = {
+    filetypes = { 'html', 'htmldjango' },
+  },
+
+  jinja_lsp = {
+    cmd = { '/home/reymerk/.cargo/bin/jinja-lsp'},
+    filetypes = {'htmldjango', 'html', 'jinja', 'py', 'rs'},
+    root_dir = PROJECT_ROOT,
+    init_options = {
+      templates = './app/templates',
+      backend = {'./app'},
+      lang = "python"
+    }
+  },
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -64,7 +82,7 @@ local servers = {
     },
   },
 }
-
+-- vim.lsp.set_log_level("debug")
 -- Setup neovim lua configuration
 require('neodev').setup()
 
@@ -75,6 +93,7 @@ capabilities.textDocument.foldingRange = {
   lineFoldingOnly = true
 }
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+capabilities.offsetEncoding = "utf-8"
 
 -- Setup mason so it can manage external tooling
 require('mason').setup()
@@ -105,6 +124,8 @@ local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
+
+local compare = cmp.config.compare
 
 cmp.setup {
   snippet = {
@@ -151,5 +172,21 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'path' },
+  },
+  sorting = {
+    priority_weight = 1.0,
+    comparators = {
+      -- compare.score_offset, -- not good at all
+      compare.locality,
+      compare.recently_used,
+      compare.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
+      compare.offset,
+      compare.order,
+      -- compare.scopes, -- what?
+      -- compare.sort_text,
+      -- compare.exact,
+      -- compare.kind,
+      -- compare.length, -- useless 
+    }
   },
 }
