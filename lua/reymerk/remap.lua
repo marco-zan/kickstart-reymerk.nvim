@@ -66,3 +66,6 @@ vim.api.nvim_set_keymap(
     }
 
 )
+
+-- 
+vim.keymap.set('n', '<leader>fp', 'vi"p', { desc = 'Paste into double hypens' })

@@ -54,9 +54,7 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   clangd = {},
-  gopls = {},
   pyright = {},
-  rust_analyzer = {},
   tsserver = {},
 
   lua_ls = {
@@ -100,6 +98,7 @@ mason_lspconfig.setup_handlers {
 }
 
 require('ufo').setup()
+require("copilot_cmp").setup()
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
@@ -140,7 +139,15 @@ cmp.setup {
       end
     end, { 'i', 's' }),
   },
+  -- formatting = {
+  --   format = lspkind.cmp_format({
+  --     mode = "symbol",
+  --     max_width = 50,
+  --     symbol_map = { Copilot = "" }
+  --   })
+  -- },
   sources = {
+    { name = 'copilot'},
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'path' },
