@@ -67,7 +67,7 @@ local servers = {
 
   jinja_lsp = {
     cmd = { '/home/reymerk/.cargo/bin/jinja-lsp'},
-    filetypes = {'htmldjango', 'html', 'jinja', 'py', 'rs'},
+    filetypes = {'htmldjango', 'html', 'jinja', 'python'},
     root_dir = PROJECT_ROOT,
     init_options = {
       templates = './app/templates',
