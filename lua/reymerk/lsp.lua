@@ -22,6 +22,7 @@ local on_attach = function(_, bufnr)
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
   nmap('<leader>cR', require('telescope.builtin').lsp_references, '[C]ode [R]eferences')
+  nmap('<leader>cD', require('telescope.builtin').lsp_references, '[C]ode References [D]')
   nmap('<leader>cI', vim.lsp.buf.implementation, '[C]ode [I]mplementation')
   -- nmap('<leader>cD', vim.lsp.buf.type_definition, '[C]ode Type [D]efinition')
   -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
@@ -95,6 +96,13 @@ capabilities.textDocument.foldingRange = {
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 capabilities.offsetEncoding = "utf-8"
 
+capabilities.workspace = {
+  didChangeWatchedFiles = {
+    dynamicRegistration = true
+  }
+}
+
+
 -- Setup mason so it can manage external tooling
 require('mason').setup()
 
@@ -138,8 +146,10 @@ cmp.setup {
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete {},
     ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+      -- This means that it will not replace the already written text 
+      -- and do not automatically select the first option
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = false,
     },
     ['<C-j>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -152,7 +162,13 @@ cmp.setup {
     end, { 'i', 's' }),
     ['<C-k>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        cmp.select_prev_item()
+        -- Disable the annoying C-k not working for signature help 
+        -- on insert mode with copilot and such
+        if cmp.get_active_entry() == nil then
+          fallback()
+        else
+          cmp.select_prev_item()
+        end
       elseif luasnip.locally_jumpable(-1) then
         luasnip.jump(-1)
       else
@@ -174,17 +190,18 @@ cmp.setup {
     { name = 'path' },
   },
   sorting = {
-    priority_weight = 1.0,
+    priority_weight = 2,
     comparators = {
-      -- compare.score_offset, -- not good at all
-      compare.locality,
-      compare.recently_used,
+      require('copilot_cmp.comparators').prioritize,
+
+      -- compare.offset, -- not good at all - they say -- but we try that
+      compare.exact,
       compare.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
-      compare.offset,
-      compare.order,
+      compare.recently_used,
+      compare.locality,
+      -- compare.order,
       -- compare.scopes, -- what?
       -- compare.sort_text,
-      -- compare.exact,
       -- compare.kind,
       -- compare.length, -- useless 
     }
