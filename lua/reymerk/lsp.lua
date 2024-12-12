@@ -140,6 +140,7 @@ luasnip.config.setup {}
 
 local compare = cmp.config.compare
 
+-- General cmp setup
 cmp.setup {
   snippet = {
     expand = function(args)
@@ -212,3 +213,10 @@ cmp.setup {
     }
   },
 }
+
+-- configure the autopairs (idk if it is already working or not without it)
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+cmp.event:on(
+  'confirm_done',
+  cmp_autopairs.on_confirm_done()
+)
