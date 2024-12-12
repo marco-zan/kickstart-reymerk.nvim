@@ -56,7 +56,6 @@ end
 local servers = {
   clangd = {},
   pyright = {},
-  tsserver = {},
 
   html = {
     filetypes = { 'html', 'htmldjango' },
@@ -65,13 +64,14 @@ local servers = {
     filetypes = { 'html', 'htmldjango' },
   },
 
+
   jinja_lsp = {
     cmd = { '/home/reymerk/.cargo/bin/jinja-lsp'},
     filetypes = {'htmldjango', 'html', 'jinja', 'python'},
     root_dir = PROJECT_ROOT,
     init_options = {
-      templates = './app/templates',
-      backend = {'./app'},
+      templates = './templates',
+      backend = {'./src'},
       lang = "python"
     }
   },
