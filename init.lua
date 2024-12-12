@@ -110,23 +110,6 @@ require('lazy').setup({
     },
   },
 
-  {
-    "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {
-      transparent = true,
-    }
-  },
-
-  { "catppuccin/nvim",
-    name = "catppuccin",
-    priority = 1000,
-    opts = {
-      flavour = "latte",
-    }
-  },
-
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
@@ -438,7 +421,4 @@ require('reymerk.lsp')
 -- Scelta del colorscheme
 -- vim.cmd([[colorscheme monokai-pro]])auto
 --
-vim.cmd[[colorscheme tokyonight]]
-vim.api.nvim_set_hl(0, 'LineNr', { fg = "#9baeff"} )
--- vim.cmd.colorscheme "catppuccin"
 require("reymerk.remap")
