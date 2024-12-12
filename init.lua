@@ -219,11 +219,25 @@ require('lazy').setup({
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    lazy = false,
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
+      'windwp/nvim-ts-autotag'
     },
     config = function()
-      pcall(require('nvim-treesitter.install').update { with_sync = true })
+      if pcall(require('nvim-treesitter.install').update { with_sync = true }) then
+        require('nvim-ts-autotag').setup({
+          opts = {
+            -- Defaults
+            enable_close = true, -- Auto close tags
+            enable_rename = true, -- Auto rename pairs of tags
+            enable_close_on_slash = false -- Auto close on trailing </
+          },
+          aliases = {
+            ["htmldjango"] = "html",
+          }
+        })
+      end
     end,
   },
 
@@ -361,7 +375,19 @@ vim.keymap.set('n', '<leader>bb', require('telescope.builtin').buffers, { desc =
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'lua', 'python', 'tsx', 'typescript', 'vimdoc', 'vim', 'zig' },
+  ensure_installed = {
+    'c',
+    'cpp',
+    'lua',
+    'python',
+    'tsx',
+    'typescript',
+    'vimdoc',
+    'vim',
+    'zig',
+    'html',
+    'htmldjango'
+  },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
