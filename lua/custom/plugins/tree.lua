@@ -1,14 +1,16 @@
 return {
-  "nvim-tree/nvim-tree.lua",
+  "antosha417/nvim-lsp-file-operations",
   version = "*",
   lazy = false,
   dependencies = {
+    "nvim-lua/plenary.nvim",
+    "nvim-tree/nvim-tree.lua",
     "nvim-tree/nvim-web-devicons",
   },
   config = function()
 
     local HEIGHT_RATIO = 0.8 -- You can change this
-    local WIDTH_RATIO = 0.5  -- You can change this too
+    local WIDTH_RATIO = 0.7  -- You can change this too
 
     local function my_on_attach(bufnr)
       local api = require "nvim-tree.api"
@@ -23,8 +25,8 @@ return {
       -- custom mappings
       vim.keymap.set('n', 'c',    api.fs.create,               opts('Create file or dir'))
       vim.keymap.set('n', 'y',    api.fs.copy.node,            opts('Yank file'))
-      vim.keymap.set('n', 'm',    api.marks.toggle,            opts('Toggle mark'))
-      vim.keymap.set('n', 'bm',   api.marks.bulk.move,         opts('Move selected'))
+      vim.keymap.set('n', 'M',    api.marks.toggle,            opts('Toggle mark'))
+      vim.keymap.set('n', 'm',   api.marks.bulk.move,         opts('Move selected'))
 
       vim.keymap.set('n', 'p',    api.fs.paste,                opts('Paste file'))
       vim.keymap.set('n', '<CR>', api.node.open.edit,          opts('Open'))
@@ -33,7 +35,7 @@ return {
       vim.keymap.set('n', 'x',    api.fs.trash,                opts('Delete'))
 
       vim.keymap.set('n', 'q',    api.tree.close,              opts('Close nvimTree'))
-      -- vim.keymap.see('n', 'py',   api.fs.copy.relative_path,   opts('Yank absolute path'))
+      vim.keymap.set('n', 'py',   api.fs.copy.relative_path,   opts('Yank absolute path'))
       -- vim.keymap.set('n', '?',     api.tree.toggle_help,                  opts('Help'))
     end
 
@@ -78,5 +80,7 @@ return {
       --   indent_width = 1,
       -- },
     }
+    
+    require("lsp-file-operations").setup()
   end,
 }

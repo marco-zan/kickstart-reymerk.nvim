@@ -88,7 +88,13 @@ local servers = {
 require('neodev').setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = vim.tbl_deep_extend(
+  "force",
+  vim.lsp.protocol.make_client_capabilities(),
+  -- returns configured operations if setup() was already called
+  -- or default operations if not
+  require'lsp-file-operations'.default_capabilities()
+)
 capabilities.textDocument.foldingRange = {
   dynamicRegistration = false,
   lineFoldingOnly = true
@@ -101,7 +107,6 @@ capabilities.workspace = {
     dynamicRegistration = true
   }
 }
-
 
 -- Setup mason so it can manage external tooling
 require('mason').setup()
