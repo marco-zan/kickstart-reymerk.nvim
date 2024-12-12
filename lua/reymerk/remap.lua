@@ -1,6 +1,6 @@
 
 -- Easy save file
-vim.keymap.set('n', '<leader>s', function() vim.cmd('up') end, { desc = '[S] Save buffer' })
+vim.keymap.set('n', '<C-s>', function() vim.cmd('up') end, { desc = '[S] Save buffer' })
 
 -- buffer navigation
 
