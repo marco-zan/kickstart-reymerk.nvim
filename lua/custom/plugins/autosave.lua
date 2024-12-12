@@ -12,7 +12,7 @@ return {
         cleaning_interval = 0, -- (milliseconds) automatically clean MsgArea after displaying `message`. See :h MsgArea
       },
       trigger_events = {"InsertLeave", "TextChanged"},
-      debounce_delay = 500, -- saves the file at most every `debounce_delay` milliseconds
+      debounce_delay = 1000, -- saves the file at most every `debounce_delay` milliseconds
     }
   end,
   keys = {
