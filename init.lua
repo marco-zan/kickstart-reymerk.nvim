@@ -181,7 +181,25 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  {
+    'numToStr/Comment.nvim',
+    opts = {},
+    config = function ()
+      require('Comment').setup()
+
+      local api = require('Comment.api')
+
+      vim.keymap.set('n', '<C-/>', api.toggle.linewise.current)
+
+      local esc = vim.api.nvim_replace_termcodes(
+          '<ESC>', true, false, true
+      )
+      vim.keymap.set('x', '<C-/>', function()
+          vim.api.nvim_feedkeys(esc, 'nx', false)
+          api.toggle.linewise(vim.fn.visualmode())
+      end)
+    end
+  },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
