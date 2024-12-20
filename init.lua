@@ -62,7 +62,6 @@ require('lazy').setup({
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
       'kevinhwang91/promise-async',
-      "kevinhwang91/nvim-ufo",
     },
   },
 
@@ -448,11 +447,6 @@ require('nvim-treesitter.configs').setup {
     -- },
   },
 }
-
--- Enable code folding 
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldenable = false
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })

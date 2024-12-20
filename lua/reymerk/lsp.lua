@@ -95,10 +95,6 @@ local capabilities = vim.tbl_deep_extend(
   -- or default operations if not
   require'lsp-file-operations'.default_capabilities()
 )
-capabilities.textDocument.foldingRange = {
-  dynamicRegistration = false,
-  lineFoldingOnly = true
-}
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 capabilities.offsetEncoding = "utf-8"
 
@@ -129,7 +125,6 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
-require('ufo').setup()
 require("copilot_cmp").setup()
 
 -- nvim-cmp setup

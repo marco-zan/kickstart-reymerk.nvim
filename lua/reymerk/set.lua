@@ -67,3 +67,36 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -- Automatically open vsplit on the right
 vim.opt.splitright = true;
 
+-- About CODE FOLDING
+
+-- Enable code folding 
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+-- To hide the fold column: aka the small arrow on the left
+-- vim.opt.foldcolumn = "0"
+
+-- To keep syntax highlighting what?
+-- vim.opt.foldtext = "" -- Disabled because is not available on 0.9.X stable relases
+
+
+
+-- Setting foldlevel sets the minimum level of a fold that will be closed by default. 
+-- Therefore I set this to 99 as I don't want this behaviour at all.
+--
+-- However, I discovered that I can use foldlevelstart to dicate upon editing a buffer
+-- what level of folds should be open by default vs closed.
+--
+-- After some experimenting, I settled on 1 for this value, meaning top level folds are
+-- open, but anything nested beyond that is closed. I've found this helps with navigating
+-- a large file as not all the contents will be expanded initially.
+vim.opt.foldlevel = 99
+vim.opt.foldleveldstart = 1
+
+-- This limits how deeply code gets folded, and I've found that I don't really care for
+-- nesting some object 20 levels deep into a function (however rare that is!). So I set
+-- this value to 4, meaning that once code gets beyond 4 levels it won't be broken down
+-- into more granular folds. I've found this means I can easily toggle larger chunks of
+-- nested code as they are treated as one fold. 
+-- I think this a very subjective setting though!
+vim.opt.foldnestmax = 4
