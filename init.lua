@@ -8,9 +8,8 @@ if vim.g.vscode then
   end
 end
 
-vim.opt.guifont = { "Consolas Ligaturized v3", "h13" }
-
 require("reymerk.set")
+require("reymerk.neovide_config")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -448,11 +447,6 @@ require('nvim-treesitter.configs').setup {
     -- },
   },
 }
-
--- Enable code folding 
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldenable = false
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })

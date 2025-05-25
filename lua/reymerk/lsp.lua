@@ -49,6 +49,8 @@ local on_attach = function(_, bufnr)
 
 end
 
+local vue_language_server_path = "/home/reymerk/.local/share/nvim/mason/packages/vue-language-server/node_modules/@vue/typescript-plugin"
+
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --
@@ -56,7 +58,7 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   clangd = {},
-  pyright = {},
+  basedpyright = {},
 
   html = {
     filetypes = { 'html', 'htmldjango' },
@@ -82,7 +84,39 @@ local servers = {
       telemetry = { enable = false },
     },
   },
+
+  ts_ls = {
+    init_options = {
+      plugins = {
+        {
+          name = "@vue/typescript-plugin",
+          location = "/usr/local/lib/node_modules/@vue/language-server",
+          languages = { "vue" },
+        },
+      },
+    },
+    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+  },
+
+  volar = {
+    cmd = { "vue-language-server", "--stdio" },
+  },
+
+
 }
+
+
+-- Enable code folding / Ufo Setup
+local ufo = require('ufo')
+
+vim.opt.foldcolumn = '0'
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
+
+vim.keymap.set('n', 'zR', ufo.openAllFolds)
+vim.keymap.set('n', 'zM', ufo.closeAllFolds)
+
 -- vim.lsp.set_log_level("debug")
 -- Setup neovim lua configuration
 require('neodev').setup()
@@ -95,6 +129,7 @@ local capabilities = vim.tbl_deep_extend(
   -- or default operations if not
   require'lsp-file-operations'.default_capabilities()
 )
+-- For code folding / ufo
 capabilities.textDocument.foldingRange = {
   dynamicRegistration = false,
   lineFoldingOnly = true
@@ -125,12 +160,16 @@ mason_lspconfig.setup_handlers {
       on_attach = on_attach,
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
+      init_options = (servers[server_name] or {}).init_options,
     }
   end,
 }
 
-require('ufo').setup()
+-- End folding configuration -- this should be after lspconfig setup
+ufo.setup()
+
 require("copilot_cmp").setup()
+
 
 -- nvim-cmp setup
 local cmp = require 'cmp'

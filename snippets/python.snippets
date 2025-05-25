@@ -1,3 +1,10 @@
 
 snippet ret_response Return response if the check failed
 	if isinstance($1, Response): return $1$0
+
+snippet mock_fn_retval Mock a function and 
+
+	mocked_$1 = MagicMock()
+	monkeypatch.setattr('app.$2 $1', mocked_$1)
+	mocked_$1.return_value = $3
+	$0
