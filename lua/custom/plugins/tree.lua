@@ -30,13 +30,16 @@ return {
 
       vim.keymap.set('n', 'p',    api.fs.paste,                opts('Paste file'))
       vim.keymap.set('n', '<CR>', api.node.open.edit,          opts('Open'))
+      vim.keymap.set('n', '<C-LeftMouse>', api.node.open.edit,          opts('Open'))
 
       vim.keymap.set('n', 'r',    api.fs.rename,               opts('Rename'))
       vim.keymap.set('n', 'x',    api.fs.trash,                opts('Delete'))
 
       vim.keymap.set('n', 'q',    api.tree.close,              opts('Close nvimTree'))
-      vim.keymap.set('n', 'py',   api.fs.copy.relative_path,   opts('Yank absolute path'))
-      -- vim.keymap.set('n', '?',     api.tree.toggle_help,                  opts('Help'))
+      vim.keymap.set('n', 'pya',   api.fs.copy.absolute_path,   opts('[P]ath [Y]ank [A]bsolute'))
+      vim.keymap.set('n', 'pyr',   api.fs.copy.relative_path,   opts('[P]ath [Y]ank [R]elative'))
+      vim.keymap.set('n', '?',     api.tree.toggle_help,                  opts('Help'))
+      vim.keymap.set('n', '<Esc>', ':NvimTreeClose<CR>', { buffer = bufnr, noremap = true, silent = true })
     end
 
     require("nvim-tree").setup {

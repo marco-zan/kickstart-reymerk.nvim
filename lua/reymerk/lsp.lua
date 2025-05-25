@@ -47,6 +47,10 @@ local on_attach = function(_, bufnr)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
 
+
+  nmap('<leader>ccd', "Copilot disable", '[C]ode [C]opilot [D]isable')
+  nmap('<leader>cce', "Copilot enable", '[C]ode [C]opilot [E]nable')
+
 end
 
 local vue_language_server_path = "/home/reymerk/.local/share/nvim/mason/packages/vue-language-server/node_modules/@vue/typescript-plugin"
