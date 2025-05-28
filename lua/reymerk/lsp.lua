@@ -1,59 +1,76 @@
 
--- LSP settings.
---  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
-  -- NOTE: Remember that lua is a real programming language, and as such it is possible
-  -- to define small helper and utility functions so you don't have to repeat yourself
-  -- many times.
-  --
-  -- In this case, we create a function that lets us more easily define mappings specific
-  -- for LSP related items. It sets the mode, buffer and description for us each time.
-  local nmap = function(keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end
-
-    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+-- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
+---@param client vim.lsp.Client
+---@param method vim.lsp.protocol.Method
+---@param bufnr? integer some lsp support methods only in specific files
+---@return boolean
+local function client_supports_method(client, method, bufnr)
+  if vim.fn.has 'nvim-0.11' == 1 then
+    return client:supports_method(method, bufnr)
+  else
+    return client.supports_method(method, { bufnr = bufnr })
   end
-
-  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-
-  nmap('<leader>cr', vim.lsp.buf.rename, '[C]ode [R]ename')
-  nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-
-  nmap('<leader>cR', require('telescope.builtin').lsp_references, '[C]ode [R]eferences')
-  nmap('<leader>cD', require('telescope.builtin').lsp_references, '[C]ode References [D]')
-  nmap('<leader>cI', vim.lsp.buf.implementation, '[C]ode [I]mplementation')
-  -- nmap('<leader>cD', vim.lsp.buf.type_definition, '[C]ode Type [D]efinition')
-  -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  -- nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-  -- See `:help K` for why this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<leader>ch', vim.lsp.buf.signature_help, '[ch] Code Signature Help')
-
-  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help )
-
-  -- Lesser used LSP functionality
-  nmap('<leader>gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, '[W]orkspace [L]ist Folders')
-
-  -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
-
-
-  nmap('<leader>ccd', "Copilot disable", '[C]ode [C]opilot [D]isable')
-  nmap('<leader>cce', "Copilot enable", '[C]ode [C]opilot [E]nable')
-
 end
 
-local vue_language_server_path = "/home/reymerk/.local/share/nvim/mason/packages/vue-language-server/node_modules/@vue/typescript-plugin"
+-- LSP settings.
+--  This function gets run when an LSP connects to a particular buffer.
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+  callback = function(event)
+    -- NOTE: Remember that lua is a real programming language, and as such it is possible
+    -- to define small helper and utility functions so you don't have to repeat yourself
+    -- many times.
+    --
+    -- In this case, we create a function that lets us more easily define mappings specific
+    -- for LSP related items. It sets the mode, buffer and description for us each time.
+    local map = function(keys, func, desc, mode)
+      mode = mode or 'n'
+      vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = desc .. " (LSP)" })
+    end
+
+    map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+
+    map('<leader>cr', vim.lsp.buf.rename, '[C]ode [R]ename')
+    map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+
+    map('<leader>cR', require('telescope.builtin').lsp_references, '[C]ode [R]eferences')
+    map('<leader>cD', require('telescope.builtin').lsp_references, '[C]ode References [D]')
+    map('<leader>cI', vim.lsp.buf.implementation, '[C]ode [I]mplementation')
+    -- map('<leader>cD', vim.lsp.buf.type_definition, '[C]ode Type [D]efinition')
+    -- map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+    -- map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+
+    -- See `:help K` for why this keymap
+    map('K', vim.lsp.buf.hover, 'Hover Documentation')
+    map('<leader>ch', vim.lsp.buf.signature_help, '[ch] Code Signature Help')
+
+    vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help )
+
+    -- Lesser used LSP functionality
+    map('<leader>gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    map('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+    map('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+    map('<leader>wl', function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, '[W]orkspace [L]ist Folders')
+
+    map('<leader>ccd', ":Copilot disable<CR>", '[C]ode [C]opilot [D]isable')
+    map('<leader>cce', ":Copilot enable<CR>", '[C]ode [C]opilot [E]nable')
+
+    local bufnr = event.buf
+    -- Create a command `:Format` local to the LSP buffer
+    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+      vim.lsp.buf.format()
+    end, { desc = 'Format current buffer with LSP' })
+
+    if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+      map('<leader>cth', function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+      end, '[C]ode [T]oggle Inlay [H]ints')
+    end
+  end
+
+})
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -147,26 +164,26 @@ capabilities.workspace = {
   }
 }
 
--- Setup mason so it can manage external tooling
-require('mason').setup()
+local ensure_installed = vim.tbl_keys(servers or {})
+vim.list_extend(ensure_installed, {
+  'stylua', -- Used to format Lua code
+})
+require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
--- Ensure the servers above are installed
-local mason_lspconfig = require 'mason-lspconfig'
-
-mason_lspconfig.setup {
-  ensure_installed = vim.tbl_keys(servers),
-}
-
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = servers[server_name],
-      filetypes = (servers[server_name] or {}).filetypes,
-      init_options = (servers[server_name] or {}).init_options,
-    }
-  end,
+require('mason-lspconfig').setup {
+  ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+  automatic_installation = false,
+  -- on_attach = on_attach,
+  handlers = {
+    function(server_name)
+      local server = servers[server_name] or {}
+      -- This handles overriding only values explicitly passed
+      -- by the server configuration above. Useful when disabling
+      -- certain features of an LSP (for example, turning off formatting for ts_ls)
+      server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+      require('lspconfig')[server_name].setup(server)
+    end,
+  },
 }
 
 -- End folding configuration -- this should be after lspconfig setup
@@ -233,8 +250,8 @@ cmp.setup {
   --   })
   -- },
   sources = {
-    { name = 'copilot'},
     { name = 'nvim_lsp' },
+    { name = 'copilot'},
     { name = 'luasnip' },
     { name = 'path' },
   },
