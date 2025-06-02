@@ -72,11 +72,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 })
 
+local vue_language_server_path = vim.fn.expand '$MASON/packages' .. '/vue-language-server' .. '/node_modules/@vue/language-server'
+
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --
---  Add any additional override configuration in the following tables. They will be passed to
---  the `settings` field of the server config. You must look up that documentation yourself.
+--  Add any additional override configuration in the following tables. Available keys are:
+--  - cmd (table): Override the default command used to start the server
+--  - filetypes (table): Override the default list of associated filetypes for the server
+--  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
+--  - settings (table): Override the default settings passed when initializing the server.
+--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 local servers = {
   clangd = {},
   basedpyright = {},
@@ -92,35 +98,42 @@ local servers = {
   jinja_lsp = {
     cmd = { '/home/reymerk/.cargo/bin/jinja-lsp'},
     filetypes = {'htmldjango', 'html', 'jinja', 'python'},
-    root_dir = PROJECT_ROOT,
-    init_options = {
-      templates = './templates',
-      backend = {'./src'},
-      lang = "python"
+    settings = {
+      root_dir = PROJECT_ROOT,
+      init_options = {
+        templates = './templates',
+        backend = {'./src'},
+        lang = "python"
+      }
     }
   },
   lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-    },
+    settings = {
+      Lua = {
+        workspace = { checkThirdParty = false },
+        telemetry = { enable = false },
+      },
+    }
   },
 
   ts_ls = {
     init_options = {
       plugins = {
         {
-          name = "@vue/typescript-plugin",
-          location = "/usr/local/lib/node_modules/@vue/language-server",
-          languages = { "vue" },
+          name = '@vue/typescript-plugin',
+          location = vue_language_server_path,
+          languages = { 'vue' },
         },
       },
     },
-    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+    filetypes = {
+      "javascript",
+      "typescript",
+      "vue",
+    },
   },
 
-  volar = {
-    cmd = { "vue-language-server", "--stdio" },
+  vue_ls = {
   },
 
 
@@ -150,6 +163,7 @@ local capabilities = vim.tbl_deep_extend(
   -- or default operations if not
   require'lsp-file-operations'.default_capabilities()
 )
+
 -- For code folding / ufo
 capabilities.textDocument.foldingRange = {
   dynamicRegistration = false,
@@ -172,19 +186,16 @@ require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
 require('mason-lspconfig').setup {
   ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-  automatic_installation = false,
-  -- on_attach = on_attach,
-  handlers = {
-    function(server_name)
-      local server = servers[server_name] or {}
-      -- This handles overriding only values explicitly passed
-      -- by the server configuration above. Useful when disabling
-      -- certain features of an LSP (for example, turning off formatting for ts_ls)
-      server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-      require('lspconfig')[server_name].setup(server)
-    end,
-  },
+  automatic_installation = false
 }
+
+for server_name, server in pairs(servers) do
+  -- This handles overriding only values explicitly passed
+  -- by the server configuration above. Useful when disabling
+  -- certain features of an LSP (for example, turning off formatting for ts_ls)
+  server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+  require('lspconfig')[server_name].setup(server)
+end
 
 -- End folding configuration -- this should be after lspconfig setup
 ufo.setup()
