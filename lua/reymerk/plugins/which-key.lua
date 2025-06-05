@@ -1,6 +1,9 @@
 return {
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
+    dependencies = {
+      { 'tpope/vim-abolish', lazy = false },
+    },
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
@@ -42,13 +45,28 @@ return {
           F12 = '<F12>',
         },
       },
-
       -- Document existing key chains
-      spec = {
-        { '<leader>s', group = '[S]earch' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-      },
+      spec = { },
     },
+    config = function(_, opts)
+      -- Call the standard setup function with the resolved options
+      require('which-key').setup(opts)
+
+      -- Register your custom key mappings for vim-abolish coercions
+      require("which-key").add({
+        { "cr", group = "coercion" },
+        { "crs", desc = "Snake Case" },
+        { "cr_", desc = "Snake Case" },
+        { "crm", desc = "Mixed Case" },
+        { "crc", desc = "Camel Case" },
+        { "cru", desc = "Snake Upper Case" },
+        { "crU", desc = "Snake Upper Case" },
+        { "crk", desc = "Kebab Case" },
+        { "crt", desc = "Title Case (not reversible)" },
+        { "cr-", desc = "Kebab Case (not reversible)" },
+        { "cr.", desc = "Dot Case (not reversible)" },
+        { "cr<space>", desc = "Space Case (not reversible)" },
+      })
+    end,
   },
 }

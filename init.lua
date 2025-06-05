@@ -9,6 +9,7 @@ if vim.g.vscode then
 end
 
 require("reymerk.set")
+require("reymerk.remap")
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -39,30 +40,7 @@ require('lazy').setup({
 
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
 
-  -- NOTE: This is where your plugins related to LSP can be installed.
-  --  The configuration is done below. Search for lspconfig to find it below.
-  { -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      -- Automatically install LSPs and related tools to stdpath for Neovim
-      -- Mason must be loaded before its dependents so we need to set it up here.
-      -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { 'mason-org/mason.nvim', opts = {} },
-      'mason-org/mason-lspconfig.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
-
-      -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
-
-      -- Allows extra capabilities provided by blink.cmp
-      'saghen/blink.cmp',
-
-      -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
-      'kevinhwang91/promise-async',
-      "kevinhwang91/nvim-ufo",
-    },
-  },
+  require "reymerk.plugins.lsp",
 
   {
    -- Autocompletion
@@ -133,66 +111,11 @@ require('lazy').setup({
     end
   },
 
+  require "reymerk.plugins.project",
+
   require "reymerk.plugins.telescope",
 
-  { -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    lazy = false,
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
-      'windwp/nvim-ts-autotag'
-    },
-    config = function()
-      if pcall(require('nvim-treesitter.install').update { with_sync = true }) then
-        require('nvim-ts-autotag').setup({
-          opts = {
-            -- Defaults
-            enable_close = true, -- Auto close tags
-            enable_rename = true, -- Auto rename pairs of tags
-            enable_close_on_slash = false -- Auto close on trailing </
-          },
-          aliases = {
-            ["htmldjango"] = "html",
-          }
-        })
-      end
-    end,
-  },
-
   require "reymerk.plugins.treesitter",
-
-  -- To highlight the color in css files. It is sooooo handy
-  {
-    'norcalli/nvim-colorizer.lua',
-    config = function()
-      require('colorizer').setup {
-        css = { rgb_fn = true; hsl_fn = true; names = true; RGB = true; RRGGBB = true;};
-        scss ={ rgb_fn = true; hsl_fn = true; names = true; RGB = true; RRGGBB = true;};
-        sass = { rgb_fn = true; hsl_fn = true; names = true; RGB = true; RRGGBB = true;};
-        html = { rgb_fn = true; hsl_fn = true; names = true; RGB = true; RRGGBB = true;};
-        htmldjango = { rgb_fn = true; hsl_fn = true; names = true; RGB = true; RRGGBB = true;};
-        'javascript';
-        'javascriptreact';
-        'typescript';
-        'typescriptreact';
-        'vue';
-        'svelte';
-        'lua';
-      }
-    end,
-
-  },
-
-  {
-    url = 'https://tpope.io/vim/abolish.git',
-  },
-  {
-    "ahmedkhalf/project.nvim",
-    config = function()
-      require("project_nvim").setup {}
-    end,
-
-  },
 
   { import = 'custom.plugins' }
 }, {
@@ -222,11 +145,9 @@ require("reymerk.autocommands")
 
 
 require("luasnip.loaders.from_snipmate").lazy_load()
-require('reymerk.lsp')
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 
 -- Scelta del colorscheme
 -- vim.cmd([[colorscheme monokai-pro]])auto
 --
-require("reymerk.remap")

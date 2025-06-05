@@ -46,8 +46,15 @@ return {
       on_attach = my_on_attach,
       disable_netrw = true,
       hijack_netrw = true,
-      respect_buf_cwd = true,
+
+      -- To enable project nvim
       sync_root_with_cwd = true,
+      respect_buf_cwd = true,
+      update_focused_file = {
+        enable = true,
+        update_root = true
+      },
+
       view = {
         relativenumber = true,
         float = {
