@@ -40,7 +40,7 @@ require('lazy').setup({
 
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
 
-  require "reymerk.plugins.lsp",
+  require "reymerk.plugins.cosobrutto",
 
   {
    -- Autocompletion
