@@ -6,9 +6,14 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.g.have_nerd_font = false
+
 -- Set highlight on search and change if i change
 vim.o.hlsearch = false
 vim.o.incsearch = true
+
+-- Preview substitutions live, as you type!
+vim.o.inccommand = 'split'
 
 -- Make line numbers default
 vim.wo.number = true
@@ -16,6 +21,11 @@ vim.wo.relativenumber = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
+
+-- Don't show the mode, since it's already in the status line
+vim.schedule(function()
+  vim.o.clipboard = 'unnamedplus'
+end)
 
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -37,28 +47,24 @@ vim.o.smartcase = true
 vim.wo.signcolumn = 'yes'
 
 -- Decrease update time
-vim.o.updatetime = 50
--- vim.o.timeout = true
--- vim.o.timeoutlen = 300
+vim.o.updatetime = 250
+
+-- Decrease mapped sequence wait time
+vim.o.timeoutlen = 300
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
--- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
 -- Scroll gives me space to See
 
-vim.opt.scrolloff = 9
+vim.opt.scrolloff = 10
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
 -- To setu the height of the suggestions (to not shoot all over the place)
 vim.opt.pumheight = 8;
-
--- To choose the best Netrw mode
-vim.g.netrw_liststyle=3
--- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
@@ -66,4 +72,8 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Automatically open vsplit on the right
 vim.opt.splitright = true;
+vim.o.splitbelow = true
+
+vim.o.list = true
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 

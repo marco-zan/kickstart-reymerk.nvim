@@ -3,32 +3,23 @@
 vim.keymap.set('n', '<C-s>', function() vim.cmd('up') end, { desc = '[S] Save buffer' })
 vim.keymap.set('n', '<leader>s', function() vim.cmd('up') end, { desc = '[S] Save buffer' })
 
+-- Diagnostic keymaps
+vim.keymap.set('n', '<leader>dd', vim.diagnostic.open_float, { desc = "[D]iagnostics [D]iagnostics cursor position" })
+-- This is just as a fallback, if telescope is not working (please no)
+vim.keymap.set('n', '<leader>db', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
+
 -- buffer navigation
 
-vim.keymap.set('n', '<leader>b]', function() vim.cmd('bn') end, { desc = '[bn] Next buffer' })
-vim.keymap.set('n', '<leader>]', function() vim.cmd('bn') end, { desc = '[bn] Next buffer' })
-vim.keymap.set('n', '<leader>bn', function() vim.cmd('bn') end, { desc = '[bn] Next buffer' })
+vim.keymap.set('n', '<leader>bt', function() vim.cmd('e ~/vim_temp.txt') end, { desc = '[B]uffer [T]emporary' })
 
-vim.keymap.set('n', '<leader>b[', function() vim.cmd('bp') end, { desc = '[bp] Previous buffer' })
-vim.keymap.set('n', '<leader>[', function() vim.cmd('bp') end, { desc = '[bp] Previous buffer' })
-vim.keymap.set('n', '<leader>bp', function() vim.cmd('bp') end, { desc = '[bp] Previous buffer' })
-
-vim.keymap.set('n', '<leader>bd', function() vim.cmd('bd') end, { desc = '[bd] Buffer delete' })
-
-vim.keymap.set('n', '<leader>bt', function() vim.cmd('e ~/vim_temp.txt') end, { desc = '[bt] Temporary Buffer' })
-
--- Harpoon keymaps
--- vim.keymap.set('n', '<leader>bh', require("harpoon.ui").toggle_quick_menu, { desc = "[B]uffers list [H]arpoon" })
--- vim.keymap.set('n', '<leader>hl', require("harpoon.ui").toggle_quick_menu, { desc = "[H]arpoon [L]ist" })
---
--- vim.keymap.set('n', '<leader>hm', require("harpoon.mark").add_file, { desc = "[H]arpoon [M]ark" })
---
--- vim.keymap.set('n', '<leader>h]', require("harpoon.ui").nav_next, { desc = '[->] Next buffer' })
--- vim.keymap.set('n', '<leader>h[', require("harpoon.ui").nav_prev, { desc = '[<-] Previous buffer' })
 
 -- To move the code with shift J and K
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+-- To keep selection when indenting
+vim.keymap.set("v", "<", "<gv", { noremap = true })
+vim.keymap.set("v", ">", ">gv", { noremap = true })
 
 -- Shift-J the right way
 vim.keymap.set("n", "J", "mzJ`z")
