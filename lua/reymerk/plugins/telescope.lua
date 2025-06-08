@@ -50,7 +50,7 @@ return {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- This strategy adapts well the telescope window even for small 
+        -- This strategy adapts well the telescope window even for small
         -- windows (without needing to resize)
         defaults = {
           layout_strategy = 'flex',
@@ -70,21 +70,21 @@ return {
               height = 0.95
             }
           },
-        },
-        mappings = {
-          i = {
-            ['<esc>'] = {
-              actions.close, type = 'action'
-            },
-            ['<C-p>'] = actions.cycle_history_prev,
-            ['<C-n>'] = actions.cycle_history_prev,
-            ["<C-j>"] = {
-              actions.move_selection_next, type = "action",
-              opts = { nowait = true, silent = true }
-            },
-            ["<C-k>"] = {
-              actions.move_selection_previous, type = "action",
-              opts = { nowait = true, silent = true }
+          mappings = {
+            i = {
+              ['<esc>'] = {
+                actions.close, type = 'action'
+              },
+              ['<C-p>'] = actions.cycle_history_prev,
+              ['<C-n>'] = actions.cycle_history_prev,
+              ["<C-j>"] = {
+                actions.move_selection_next, type = "action",
+                opts = { nowait = true, silent = true }
+              },
+              ["<C-k>"] = {
+                actions.move_selection_previous, type = "action",
+                opts = { nowait = true, silent = true }
+              },
             },
           },
         },
@@ -96,11 +96,11 @@ return {
         },
       }
 
-      -- The real magic: automatically identify the project root based on git files or 
+      -- The real magic: automatically identify the project root based on git files or
       -- lsp active in the current buffer
       function PROJECT_ROOT()
-        -- This works because I have another plugin that dynamically changes 
-        -- the working directory based on the project root (using lsp, git and 
+        -- This works because I have another plugin that dynamically changes
+        -- the working directory based on the project root (using lsp, git and
         -- other things)
         return vim.loop.cwd()
       end

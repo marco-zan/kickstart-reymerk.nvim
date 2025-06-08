@@ -32,7 +32,7 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- gonna love it
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
--- worst place in the universe 
+-- worst place in the universe
 vim.keymap.set("n", "Q", "<nop>")
 
 -- Replace under cursor
@@ -56,12 +56,13 @@ vim.api.nvim_set_keymap(
 
 )
 
--- 
+--
 vim.keymap.set('n', '<leader>fp', 'vi"p', { desc = 'Paste into double hypens' })
 
--- Fugitive maps 
+-- Fugitive maps
 vim.keymap.set('n', '<leader>gm', function() vim.cmd('Gvdiffsplit') end, { desc = '[G]it show [M]odifications (diff)' })
 vim.keymap.set('n', '<leader>gd', function() vim.cmd('Gvdiffsplit') end, { desc = '[G]it show [D]iff' })
 vim.keymap.set('n', '<leader>gg', function() vim.cmd('G') end, { desc = '[G]it [G]it status' })
 vim.keymap.set('n', '<leader>gcc', function() vim.cmd('G commit') end, { desc = '[G]it [C]ommit [C]ode' })
 vim.keymap.set('n', '<leader>gb', function() vim.cmd('GBrowse') end, { desc = '[G]it show in [B]rowser' })
+vim.keymap.set('n', '<leader>gh', function() vim.cmd('GBrowse') end, { desc = 'Open in [G]it [H]ub' })

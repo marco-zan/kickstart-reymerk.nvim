@@ -90,7 +90,7 @@ return {
       --   indent_width = 1,
       -- },
     }
-    
+
     require("lsp-file-operations").setup()
   end,
 }
