@@ -2,12 +2,9 @@
 if vim.g.vscode then
   -- Scelta del colorscheme
   vim.cmd([[colorscheme default]])
-
-  do
-    return
-  end
 end
 
+require("reymerk.settings_neovide")
 require("reymerk.set")
 require("reymerk.remap")
 
