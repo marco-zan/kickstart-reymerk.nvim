@@ -83,9 +83,10 @@ return {
           return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
         end,
       },
-      -- filters = {
-      --   custom = { "^.git$" },
-      -- },
+      filters = {
+        git_ignored = false,
+        dotfiles = false,
+      },
       -- renderer = {
       --   indent_width = 1,
       -- },
