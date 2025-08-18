@@ -11,6 +11,7 @@ vim.keymap.set('n', '<leader>db', vim.diagnostic.setloclist, { desc = "Open diag
 -- buffer navigation
 
 vim.keymap.set('n', '<leader>bt', function() vim.cmd('e ~/vim_temp.txt') end, { desc = '[B]uffer [T]emporary' })
+vim.keymap.set('n', '<leader>bd', function() vim.cmd('bd') end, { desc = '[B]uffer [D]elete' })
 
 
 -- To move the code with shift J and K
