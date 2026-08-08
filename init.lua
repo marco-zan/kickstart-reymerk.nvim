@@ -96,5 +96,26 @@ require('lazy').setup({
 
 require("reymerk.autocommands")
 
+-- Enable treesitter highlighting
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {
+    'python',
+    'rust',
+    'php',
+    'c',
+    'cpp',
+    'yaml',
+    'yaml.ansible',
+
+    'typescript',
+    'javascript',
+  },
+  callback = function()
+    vim.treesitter.start()
+    -- TODO: This is experiemental
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
+})
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
