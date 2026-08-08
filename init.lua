@@ -33,7 +33,7 @@ require('lazy').setup({
   -- Add the Hub to the Git
   'tpope/vim-rhubarb',
 
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  require "reymerk.plugins.guess-my-indent",
 
   require "reymerk.plugins.cosobrutto",
 
