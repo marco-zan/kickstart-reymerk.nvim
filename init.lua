@@ -45,6 +45,8 @@ require('lazy').setup({
 
   require "reymerk.plugins.lualine",
 
+  require "reymerk.plugins.formatting-conform",
+
   -- I don't even know what it does and wether i need it
   --
   -- { -- Add indentation guides even on blank lines

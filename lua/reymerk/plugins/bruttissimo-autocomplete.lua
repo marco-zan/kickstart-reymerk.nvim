@@ -129,7 +129,7 @@ return {
 --     ['<C-f>'] = cmp.mapping.scroll_docs(4),
 --     ['<C-Space>'] = cmp.mapping.complete {},
 --     ['<CR>'] = cmp.mapping.confirm {
---       -- This means that it will not replace the already written text 
+--       -- This means that it will not replace the already written text
 --       -- and do not automatically select the first option
 --       behavior = cmp.ConfirmBehavior.Insert,
 --       select = false,
@@ -145,7 +145,7 @@ return {
 --     end, { 'i', 's' }),
 --     ['<C-k>'] = cmp.mapping(function(fallback)
 --       if cmp.visible() then
---         -- Disable the annoying C-k not working for signature help 
+--         -- Disable the annoying C-k not working for signature help
 --         -- on insert mode with copilot and such
 --         if cmp.get_active_entry() == nil then
 --           fallback()
