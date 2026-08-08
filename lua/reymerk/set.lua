@@ -33,8 +33,10 @@ end)
 vim.o.clipboard = 'unnamedplus'
 
 -- Enable break indent - idk be smart
-vim.o.breakindent = true
-vim.o.smartindent = true
+-- vim.o.breakindent = true
+-- vim.o.smartindent = true
+-- Didn't know why it was there, and i don't like it
+-- not smart at all
 
 -- Save undo history
 vim.o.undofile = true
