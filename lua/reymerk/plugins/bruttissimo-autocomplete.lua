@@ -28,7 +28,13 @@ return {
           --   end,
           -- },
         },
-        opts = {},
+        opts = {
+          paths = vim.fn.stdpath("config") .. "/snippets",
+        },
+        config = function(_, opts)
+          require("luasnip").setup(opts)
+          require("luasnip.loaders.from_snipmate").load()
+        end,
       },
       'folke/lazydev.nvim',
 
