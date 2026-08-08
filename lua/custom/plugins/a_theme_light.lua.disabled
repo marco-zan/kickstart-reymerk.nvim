@@ -4,7 +4,14 @@ return {
   lazy = false,
   priority = 1000,
   ---@type solarized.config
-  opts = {},
+  opts = {
+    on_highlights = function(colors, color)
+      return {
+        -- 'bg' sets the cursor block color, 'fg' sets the color of the text underneath
+        Cursor = { bg = '#555555', fg = colors.bg },
+      }
+    end,
+  },
   config = function(_, opts)
     vim.o.termguicolors = true
     vim.o.background = 'light'
