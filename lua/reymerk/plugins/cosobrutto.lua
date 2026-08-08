@@ -112,6 +112,16 @@ return {
           -- end, '[W]orkspace [L]ist Folders')
 
           map('<leader>ctc', ":Copilot toggle<CR>", '[C]ode [T]oggle [C]opilot')
+          map('<leader>ctd', function ()
+            local text_enabled = vim.diagnostic.config().virtual_text;
+            if text_enabled then
+              vim.diagnostic.config({ virtual_text = false })
+              print("Disabled diagnostic text")
+            else
+              vim.diagnostic.config({ virtual_text = true })
+              print("Enabled diagnostic text")
+            end
+          end, '[C]ode [T]oggle [D]iagnostic text')
 
           map('<leader>cff', function ()
             require('telescope.builtin').lsp_document_symbols({ symbols='function' })
