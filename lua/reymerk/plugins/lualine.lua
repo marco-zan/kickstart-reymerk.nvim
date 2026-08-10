@@ -1,11 +1,22 @@
 -- The statusline at the bottom, no need to know more, it just 
 -- works, no problem
 
--- Provide the number of words of the document. Useful more 
--- for writing than actual code, but i figured is better to have 
--- it than not have it
-local function getWords()
-  return tostring(vim.fn.wordcount().words)
+local function getProjectOrWords()
+  local cwd = vim.fn.getcwd()
+  if vim.fn.isdirectory(cwd .. '/.git') == 1 then
+    local repo_name = cwd:match('([^/]+)$')
+    local origin = vim.fn.system('git -C ' .. vim.fn.shellescape(cwd) .. ' remote get-url origin 2>/dev/null')
+    origin = origin:gsub('%s+$', '')
+    if origin:find('github') then
+      return 'gh:' .. repo_name
+    elseif origin:find('bitbucket') then
+      return 'bb:' .. repo_name
+    else
+      return repo_name
+    end
+  else
+    return tostring(vim.fn.wordcount().words)
+  end
 end
 
 return {
@@ -29,7 +40,7 @@ return {
         lualine_x = {'encoding', 'fileformat'},
         lualine_y = {
           "location",
-          { getWords }
+          { getProjectOrWords }
         },
         lualine_z = { "mode" }
       },
