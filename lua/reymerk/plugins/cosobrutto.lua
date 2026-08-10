@@ -202,6 +202,7 @@ return {
 
         clangd = {},
         basedpyright = {},
+        phpactor = {},
 
         html = {
           filetypes = { 'html', 'htmldjango' },

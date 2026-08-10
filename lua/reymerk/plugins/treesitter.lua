@@ -13,6 +13,7 @@ return {
         'luadoc',
         'markdown',
         'markdown_inline',
+        'php',
         'python',
       }
     end,
