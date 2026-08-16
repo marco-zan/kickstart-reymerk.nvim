@@ -3,7 +3,7 @@ return {
     'stevearc/conform.nvim',
     opts = {
       formatters_by_ft = {
-        javascript = { "prettier" },
+        javascript = { "prettierd", "prettier", stop_after_first = true },
         lua = { "stylua" },
         -- typescript = { "prettier" },
         -- python = { "black" },
